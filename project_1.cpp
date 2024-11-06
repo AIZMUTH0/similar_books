@@ -5,6 +5,10 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <thread>
+#include <chrono>
+#include <mutex>
+#include <stdlib.h>
 #include <algorithm>
 #include <iomanip> //input output manipulater(Table output).
 
@@ -74,6 +78,8 @@ public:
 
 void bookDetails(vector<string> &file_name, vector<string> &file_access_paths, int &filesCount);
 
+void blink(int s_i, int s_j, int i, int j);
+
 // Step 3 Similaity Index :function:
 void similarityIndex(int i, vector<string> &w_i, vector<float> &n_i, int j, vector<string> &w, vector<float> &n_j, vector<similarityMatrix> &matrix);
 
@@ -82,6 +88,10 @@ auto compareMatrix = [](const auto &matrix_1, const auto &matrix_2)
 {
    return matrix_1.frequency > matrix_2.frequency;
 };
+
+mutex mtxLock;
+int steps_i = 64;
+int steps_j = 2016;
 
 // Step 1 :Top occuring words:sorting function,Comparing part
 bool comapareSecond(pair<string, int> &a, pair<string, int> &b);
@@ -100,14 +110,14 @@ int main()
    vector<string> file_access_paths;
    int filesCount = 0;
    int count = 0;
-   
-   //Finding data-Set
+
+   // Finding data-Set
    bookDetails(file_names, file_access_paths, filesCount);
 
    // Step 4 : Similarity Matrix :Part: blank.
    vector<similarityMatrix> similarity_matrix;
 
-   cout << "Please wait , processing starts it may require 7 to 8 minutes to finishes excecution ...  " << endl;
+   
 
    // Step 4 : Similarity Matrix, wise looping (Excluding self similarity)
    // Creating,Sending,Processing,Comparing,Storing,Deleting and Repeating , for 2080 times for Required information.
@@ -120,6 +130,7 @@ int main()
       File_i->requireWords();
       File_i->RemovingCommon();
       File_i->storingInClass();
+      steps_i--;
 
       for (int j = 0; j < filesCount; j++)
       {
@@ -142,7 +153,11 @@ int main()
 
             File_j->clear();
             delete File_j;
-            count++;
+            steps_j--;
+            // this thread will show ongoing process
+            thread T1(blink, steps_i, steps_j, i, j);
+            T1.detach();
+            
          }
 
          else
@@ -156,8 +171,6 @@ int main()
       delete File_i;
       count++;
    }
-
-   cout << endl;
 
    // Step 4 : Similarity Matrix : sorting.
    sort(begin(similarity_matrix), end(similarity_matrix), compareMatrix);
@@ -293,6 +306,11 @@ void report(vector<similarityMatrix> matrix, vector<string> Book)
    const int frequencyWidth = 15;
    const int BookWidth = 9;
 
+   cout << "\r";
+   system("CLS");
+   cout << "\r";
+   cout << endl;
+
    cout << "Top Ten Similar Pair Of Text Books Are : " << endl
         << endl;
    for (int i = 0; i < 10; i++)
@@ -340,7 +358,7 @@ void ParentFile::storingInClass()
    sorted_word_and_count.clear();
 }
 
-//Data-set entries Storing
+// Data-set entries Storing
 
 void bookDetails(vector<string> &file_names, vector<string> &file_access_paths, int &filesCount)
 {
@@ -402,6 +420,20 @@ void bookDetails(vector<string> &file_names, vector<string> &file_access_paths, 
          }
       }
    }
+}
+
+void blink(int steps_i, int steps_j, int i, int j)
+{
+   mtxLock;
+   cout << "\r";
+   
+   system("CLS");
+   cout << string(100, ' ');
+   cout << flush;
+   cout << "\r";
+   cout << "Please wait is has this Steps : " << steps_i << "--" << steps_j << " Remaining. " << "Prcessing 2D similarity Matrix i-j : " << i << "-" << j;
+   cout << "\r";
+   mtxLock;
 }
 
 //-------------------------------------------------------------------//
