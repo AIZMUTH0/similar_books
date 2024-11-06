@@ -8,7 +8,8 @@ References    : Class notes , Professor lectures.
 Requirement   : Libraries ==
 
               : Standard C++ libraries      = <cstring>, <string>, <iostream>, <fstream> <iomanip>
-              : Standard template libraries = <vector>, <map>, <algorithm>
+                                              <thread>, <mutex>, <stdlid.h>
+              : Standard template libraries = <vector>, <map>, <algorithm>, <chrono>
               : boost                       = <filesystem>
 
               : Data-Set                    = Book-Txt
@@ -48,7 +49,7 @@ Procedure    :
                void fileDetails_input(int i, vector<string> Names, vector<string> Paths);
              :
 
-           b): For step 1 : Reading File : Alphabet or Numeric characters and storing as capital letters Word in vector word_i.
+           b): For step 1 : Reading File : Alphabet or Numeric characters and storing as capital letters Word in vector.
              : void requireWords();
 
            c): For Step 2 : Removing Commonly occurring words.
@@ -76,20 +77,20 @@ Procedure    :
 Advantages   :
            i): class    :  having class for same objects reduces code writing.
           ii): comments :  Comments make code understandable
-         iii): pointer  :  SimilatityIndex function will run for 2080 time in 64*64 matrix(exluding self similarity)
+         iii): pointer  :  SimilatityIndex function will run for 2080 time in 64*64 matrix(excluding self similarity)
                            this function is having pointer of  3 vectors (words , count and normal frequency)
-                           insted of real copy vectors. 
+                           instead of real copy vectors. 
              
 Disadvantages:
            i): time complixicity : O(n)
-             : in this code map is used to track words reoccurence(counting)
+             : in this code, map is used to track words reoccurrence(counting)
              : every file is having minimum 40,000 words , and similarityMarix
-             : calling files_i and file_j 2080 times 
-             : This map has to process 40000 * 2000 = 8,00,00,000 words
+             : calling files_i and file_j 2016 + 64 times 
+             : this map has to process 40000 * 2000 = 8,00,00,000 words
              : this makes execution time around 5 minutes to 8 minutes.
 
 Uses         :
-           i): This file is used to identyfy similar par of books
+           i): This file is used to identify similar pair of books
           ii): This code can be use by any individual to find similar pair of books
               
 Result       : Top 10 similar pair of books , from given set of 64 text books in txt format
