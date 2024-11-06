@@ -431,7 +431,7 @@ void blink(int steps_i, int steps_j, int i, int j)
    cout << string(100, ' ');
    cout << flush;
    cout << "\r";
-   cout << "Please wait is has this Steps : " << steps_i << "--" << steps_j << " Remaining. " << "Prcessing 2D similarity Matrix i-j : " << i << "-" << j;
+   cout << "Please wait it has this Steps : " << steps_i << "--" << steps_j << " Remaining. " << "Prcessing 2D similarity Matrix i-j : " << i << "-" << j;
    cout << "\r";
    mtxLock;
 }
